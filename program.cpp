@@ -1,37 +1,62 @@
-//
-// Created by David Lacle on 19/02/2025.
-//
-
+#include <vector>
 #include "program.h"
-#include <iostream>
-using namespace std;
+#include "instruction.h"
 
-// Constructor Implementation
-Program::Program(int arithmetic,int store,int load,int branch ){
-    numArith = arithmetic;  // in GHz
-    numStore = store;
-    numLoad = load;
-    numBranch = branch;
-    numTotal = numArith+numStore+numLoad+numBranch;
-}
-
-Program::Program(int totalInstructions, double fracArith, double fracStore, double fracLoad) {
-    numArith = static_cast<int>(totalInstructions * fracArith);
-    numStore = static_cast<int>(totalInstructions * fracStore);
-    numLoad = static_cast<int>(totalInstructions * fracLoad);
-    numBranch = totalInstructions - (numArith + numStore + numLoad); // Remaining instructions
-    numTotal = totalInstructions;
-
-}
-
-void Program::printStats() {
-    cout << "Program Specifications:" << endl;
-    cout << "num (Arithmetic): " << numArith << endl;
-    cout << "num (Store): " << numStore << endl;
-    cout << "num (Load): " << numLoad << endl;
-    cout << "num (Branch): " << numBranch << endl;
-    cout << "num (Total): "<< numTotal<<endl;
-
+Program::Program ()
+{
+	instructions = new std::vector<Instruction*>;
 }
 
 
+Program::~Program ()
+{
+	std::vector<Instruction*>::iterator it;
+
+	for (it = instructions->begin (); it < instructions->end(); it++)
+	{
+		delete *it;
+	}
+	delete instructions;
+}
+
+
+void Program::appendInstruction (Instruction *instruction)
+{
+	instructions->push_back (instruction);
+}
+
+
+void Program::disassemble ()
+{
+	std::vector<Instruction*>::iterator it;
+
+	for (it = instructions->begin (); it < instructions->end (); it++)
+	{
+		(*it)->disassemble ();
+	}
+}
+
+
+void Program::singleStep (Registers *registers)
+{
+	std::vector<Instruction*>::iterator it = instructions->begin () + registers->getPC ();
+
+	if (it >= instructions->begin () && it < instructions->end ())
+	{
+		registers->setPC ((*it)->execute (registers));
+	}
+}
+
+
+void Program::execute (Registers *registers)
+{
+  cout<<"no"<< endl;
+	std::vector<Instruction*>::iterator it = instructions->begin () + registers->getPC ();
+	int a;
+	while (it >= instructions->begin () && it < instructions->end ())
+	{
+		singleStep (registers);
+		it = instructions->begin () + registers->getPC ();
+	}
+cout<<"yes"<< endl;
+}

@@ -1,82 +1,78 @@
-#include <iostream>
-#include "computer.h"
+#include "simulator.h"
 #include "program.h"
-using namespace std;
+#include "registers.h"
 
-int main() {
-    // Creating an object of Computer class
+// void loadProgram (Program *program)
+// {
+// 	program->appendInstruction (new OriInstruction (1, 0, 12));
+// 	program->appendInstruction (new OriInstruction (2, 0, 4));
+// 	program->appendInstruction (new OriInstruction (3, 0, 1));
+// 	program->appendInstruction (new AddInstruction (4, 4, 1));
+// 	program->appendInstruction (new SubInstruction (2, 2, 3));
+// 	program->appendInstruction (new BrneInstruction (2, 0, -3));
+// }
 
-    Program Program_A(2000,100,100,50);
-    Program Program_B(2000,0.1, 0.4, 0.25);
-    Program Program_C(500,100,2000,200);
-    // Create different computer instances
-    Computer Computer1(1.0, 2.0, 2.0, 3.0, 4.0);
-    Computer Computer2(1.2, 2.0, 3.0, 4.0, 3.0);
-    Computer Computer3(2.0, 2.0, 2.0, 4.0, 6.0);
+
+// int main (void)
+// {
+	// Registers A;
+	// A.setRegisters(31,30);
+	// A.Print();
+	// cout << A.getRegisters(31)<<endl;
+	// // Initialize registers with all zeros and PC set to 0
+	// Registers regs;
+	//
+	// // Set initial register values for testing
+	// regs.setRegisters(2, 10);  // $2 = 10
+	// regs.setRegisters(3, 10);  // $3 = 20
+	//
+	// // Create an AddInstruction object: add $1, $2, $3
+	// Instruction* instr = new AddInstruction(1, 2, 3);
+	// Instruction* instr1= new BrneInstruction(2, 3, -4);
+	// std::cout << "counter: " << regs.getPC() << std::endl;
+	// // Test disassemble method
+	// std::cout << "Disassembly: ";
+	// instr->disassemble();
+	// instr1->disassemble();
+	// // Execute the instruction
+	// regs.setPC(instr->execute(&regs));
+	// std::cout << "counter: " << regs.getPC() << std::endl;
+	// regs.setPC(instr1->execute(&regs));
+	// std::cout << "counter: " << regs.getPC() << std::endl;
+	// // Output result to verify correctness
+	// std::cout << "Register $1 after addition: " << regs.getRegisters(4) << std::endl;
+	// std::cout << "counter: " << regs.getPC() << std::endl;
+	// // Cleanup
+	// //regs.Print();
+	//
+	// delete instr;
 
 
-    // Display Specifications
+// 	return 0;
+// }
 
-    Computer1.printStats();
-    Computer1.calculateExecutionTime(Program_A);
-    cout << "computer 1 program A" << std::endl;
-    // cout<<"Execution Time: "<<Computer2.calculateExecutionTime(Program_B)<<std::endl;
-    cout<<"Execution Time: "<<Computer1.calulateExecutionTimelocal(Program_A)<<std::endl;
-    cout<<"mips: "<<Computer1.calculatemips(Program_A)<<std::endl;
-    cout<<"global mips: "<<Computer1.calculatemipsglobal(Program_A)<<std::endl;
-    cout << "computer 1 program B" << std::endl;
-    Computer1.calculateExecutionTime(Program_B);
-    // cout<<"Execution Time: "<<Computer1.calculateExecutionTime(Program_A)<<std::endl;
-    cout<<"Execution Time: "<<Computer1.calulateExecutionTimelocal(Program_B)<<std::endl;
-    cout<<"mips: "<<Computer1.calculatemips(Program_B)<<std::endl;
-    cout<<"global mips: "<<Computer1.calculatemipsglobal(Program_B)<<std::endl;
 
-    cout << "computer 1 program C" << std::endl;
-    Computer1.calculateExecutionTime(Program_C);
-    // cout<<"Execution Time: "<<Computer1.calculateExecutionTime(Program_C)<<std::endl;
-    cout<<"Execution Time: "<<Computer1.calulateExecutionTimelocal(Program_C)<<std::endl;
-    cout<<"global mips: "<<Computer1.calculatemipsglobal(Program_C)<<std::endl;
-    cout<<"mips: "<<Computer1.calculatemips(Program_C)<<std::endl;
+void loadProgram (Program *program)
+{
+	program->appendInstruction (new OriInstruction (1, 0, 12));
+	program->appendInstruction (new OriInstruction (2, 0, 4));
+	program->appendInstruction (new OriInstruction (3, 0, 1));
+	program->appendInstruction (new AddInstruction (4, 4, 1));
+	program->appendInstruction (new SubInstruction (2, 2, 3));
+	program->appendInstruction (new BrneInstruction (2, 0, -3));
+}
 
-    // double globalCPI = Computer1.calculateGlobalCPI(); // Store the result
-    // std::cout << "Global CPI: " << globalCPI << std::endl; // Print the result
 
-    // Computer 2 Stats and Calculations
-    Computer2.printStats();
-    cout << "computer 2 program A" << std::endl;
-    Computer2.calculateExecutionTime(Program_A);
-    cout << "Execution Time: " << Computer2.calulateExecutionTimelocal(Program_A) << std::endl;
-    cout << "mips: " << Computer2.calculatemips(Program_A) << std::endl;
-    cout << "global mips: " << Computer2.calculatemipsglobal(Program_A) << std::endl;
+int main (void)
+{
+	Registers *registers	= new Registers ();
+	Program	*program	= new Program ();
 
-    cout << "computer 2 program B" << std::endl;    Computer2.calculateExecutionTime(Program_B);
-    cout << "Execution Time: " << Computer2.calulateExecutionTimelocal(Program_B) << std::endl;
-    cout << "mips: " << Computer2.calculatemips(Program_B) << std::endl;
-    cout << "global mips: " << Computer2.calculatemipsglobal(Program_B) << std::endl;
+	loadProgram (program);
 
-    Computer2.calculateExecutionTime(Program_C);
-    cout << "computer 2 program C" << std::endl;
-    cout << "Execution Time: " << Computer2.calulateExecutionTimelocal(Program_C) << std::endl;
-    cout << "global mips: " << Computer2.calculatemipsglobal(Program_C) << std::endl;
-    cout << "mips: " << Computer2.calculatemips(Program_C) << std::endl;
+	Simulator theSimulator = Simulator (registers, program);
 
-    // Computer 3 Stats and Calculations
-    Computer3.printStats();
-    cout << "computer 3 program A" << std::endl;
-    Computer3.calculateExecutionTime(Program_A);
-    cout << "Execution Time: " << Computer3.calulateExecutionTimelocal(Program_A) << std::endl;
-    cout << "mips: " << Computer3.calculatemips(Program_A) << std::endl;
-    cout << "global mips: " << Computer3.calculatemipsglobal(Program_A) << std::endl;
-    cout << "computer 3 program B" << std::endl;
-    Computer3.calculateExecutionTime(Program_B);
-    cout << "Execution Time: " << Computer3.calulateExecutionTimelocal(Program_B) << std::endl;
-    cout << "mips: " << Computer3.calculatemips(Program_B) << std::endl;
-    cout << "global mips: " << Computer3.calculatemipsglobal(Program_B) << std::endl;
-    cout << "computer 3 program C" << std::endl;
-    Computer3.calculateExecutionTime(Program_C);
-    cout << "Execution Time: " << Computer3.calulateExecutionTimelocal(Program_C) << std::endl;
-    cout << "global mips: " << Computer3.calculatemipsglobal(Program_C) << std::endl;
-    cout << "mips: " << Computer3.calculatemips(Program_C) << std::endl;
+	theSimulator.ui ();
 
-    return 0;
+	return 0;
 }

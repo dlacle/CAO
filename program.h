@@ -1,23 +1,21 @@
-//
-// Created by David Lacle on 19/02/2025.
-//
+#ifndef _PROGRAM_H_
+#define _PROGRAM_H_
 
-#ifndef PROGRAM_H_INCLUDED
-#define PROGRAM_H_INCLUDED
-class Program{
-private:
+#include <vector>
+#include "instruction.h"
+#include "registers.h"
 
-public:
-    int numArith;
-    int numStore;
-    int numLoad;
-    int numBranch;
-    int numTotal;
+class Program
+{
+		std::vector<Instruction*>	*instructions;
+	public:
+		Program ();
+		~Program ();
 
-    Program (int, int, int, int);
-    Program (int,double,double,double);
-    void printStats();
-    // Getter functions
-
+		void	appendInstruction (Instruction*);
+		void	disassemble ();
+		void	singleStep (Registers*);
+		void	execute (Registers*);
 };
-#endif //PROGRAM_H
+
+#endif /* _PROGRAM_H_ */
